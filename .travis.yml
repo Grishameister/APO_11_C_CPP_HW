@@ -21,6 +21,7 @@ addons:
       - cppcheck
       - make
       - cmake
+      - python2.7
 
 
 env:
@@ -52,4 +53,5 @@ script:
   - ctest --output-on-failure
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/tests_tests ; fi
   - cd ..
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --enable=all --error-exitcode=1 -I include --suppress=missingIncludeSystem ./src ./include/*.h --check-config ; fi
   - ./linters/run.sh
