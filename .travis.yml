@@ -52,4 +52,4 @@ script:
   - ctest --output-on-failure
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/tests_tests ; fi
   - cd ..
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --enable=warning,performance,information ./src ./test ./include/*.h; fiS
+  - ./linters/run.sh

@@ -6,6 +6,8 @@ list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/main.c")
 file(GLOB tests "${PROJECT_SOURCE_DIR}/test/*.cpp")
 list(REMOVE_ITEM tests "${PROJECT_SOURCE_DIR}/test/main.cpp")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 foreach(file ${tests})
     set(name)
     get_filename_component(name ${file} NAME_WE)

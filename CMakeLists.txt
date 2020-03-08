@@ -4,6 +4,7 @@ project(hw-1)
 
 enable_language(C CXX ASM)
 set(CMAKE_C_FLAGS  "-std=c11")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #
 ## Test definitions ###
 #

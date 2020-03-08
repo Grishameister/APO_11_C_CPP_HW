@@ -1,5 +1,5 @@
-#ifndef PROJECT_INCLUDE_PARSER_H_
-#define PROJECT_INCLUDE_PARSER_H_
+#ifndef INCLUDE_PARSER_H_
+#define INCLUDE_PARSER_H_
 
 
 typedef struct Email {
@@ -28,4 +28,4 @@ Email* parse(char* address);
 void free_email(Email* email);
 void print_struct(Email* email);
 
-#endif  // PROJECT_INCLUDE_PARSER_H_
+#endif  // INCLUDE_PARSER_H_
