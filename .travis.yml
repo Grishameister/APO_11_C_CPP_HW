@@ -31,7 +31,7 @@ script:
   - cmake ..
   - cmake --build .
   - ctest
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --leak-check=yes ./test/project_tests ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --leak-check=yes ./test/project_test ; fi
   - cd ..
   - rm -rf build
   - mkdir build
@@ -39,7 +39,7 @@ script:
   - cmake -DENABLE_PARALLEL=ON -DENABLE_COVERAGE=ON ..
   - cmake --build .
   - ctest
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --leak-check=yes ./test/project_tests ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --leak-check=yes ./test/project_test ; fi
   - cd ..
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --enable=all --error-exitcode=1 -I parallel_lib/include consistent_lib/include --suppress=missingIncludeSystem ./parallel_lib ./consistent_lib main.c --check-config ; fi
 
