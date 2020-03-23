@@ -1,15 +1,17 @@
-dist:     trusty    
-sudo:     required  
-language: c      
+dist: trusty    
+sudo: required  
+language: c
+
+branches:
+  only:
+    - /.*/   
 
 os:
   - linux
 
 
 compiler:
-  
   - gcc
-
 
 addons:
   apt:
@@ -28,7 +30,6 @@ addons:
 
 
 script:
-  # скрипт сборки и тестирования проекта:
   - pip install --user cpp-coveralls
   - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
   - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
@@ -41,6 +42,5 @@ script:
   - ctest --output-on-failure
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/project_test ; fi
   - cd ..
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --enable=all --error-exitcode=1 -I include --suppress=missingIncludeSystem ../src ../include/*.h --check-config ; fi
  after_success:
   - coveralls --root .. --build-root . -E ".*CMakeFiles.*" -E ".*googletest*" --gcov /usr/bin/gcov --gcov-options '\-lp
