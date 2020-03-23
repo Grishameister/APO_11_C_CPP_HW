@@ -22,6 +22,7 @@ addons:
       - make
       - cmake
       - python2.7
+      - libgtest-dev
 
 
 env:
