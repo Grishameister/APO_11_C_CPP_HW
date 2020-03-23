@@ -26,7 +26,10 @@ addons:
 
 script:
   # скрипт сборки и тестирования проекта:
-  - sudo apt-get install --yes libgtest-dev
+  - sudo apt install libgtest-dev build-essential cmake
+  - cd /usr/src/googletest
+  - sudo cmake .
+  - sudo cmake --build . --target install
   - mkdir build
   - cd build
   - cmake ..
