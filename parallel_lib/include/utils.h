@@ -18,7 +18,7 @@ int my_strncat(char* first_str, const char* second_str, char** directory, size_t
 
 int find_max_string(const char* text, char** directory, size_t size_of_part);
 
-int parse_text(const char* path_to_text);
+int parse_text(const char* path_to_text, char** directory);
 
 
 #endif // PARALLEL_LIB_INCLUDE_UTILS_H_

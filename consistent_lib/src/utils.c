@@ -134,7 +134,7 @@ int find_max_string(const char* text, char** directory, size_t size_of_part) {
 }
 
 
-int parse_text(const char* path_to_text) {
+int parse_text(const char* path_to_text, char** directory) {
 	FILE* text = fopen(path_to_text, "r");
     if (!text) {
         return ERR_OPEN_FILE;
@@ -152,14 +152,10 @@ int parse_text(const char* path_to_text) {
         return ERR_MMAP;
     }
 
-	char* max = NULL;
-	if (find_max_string(ptr, &max, st.st_size)) {
+	if (find_max_string(ptr, directory, st.st_size)) {
 		return ERR_FIND_STR;
 	}
-	printf("%ld %s\n", strlen(max), max);
-
 	munmap(ptr, st.st_size);
 	fclose(text);
-	free(max);
 	return 0;
 }

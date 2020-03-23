@@ -151,7 +151,7 @@ static int buffer_has_end_of_str(char* str, size_t* num, size_t bytes) {
 }
 
 
-int parse_text(const char* path_to_text) {
+int parse_text(const char* path_to_text, char** directory) {
 	FILE* text = fopen(path_to_text, "r");
     if (!text) {
         return ERR_OPEN_FILE;
@@ -286,7 +286,7 @@ int parse_text(const char* path_to_text) {
 		}
 		close(fd[0]);
 		munmap(ptr, st.st_size);
-		free(max_str);
+		*directory = max_str;
 		free(temp_str);
 		fclose(text);
 	}

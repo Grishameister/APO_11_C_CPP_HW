@@ -1,4 +1,6 @@
 #include "gtest/gtest.h"
+#include <sys/mman.h>
+#include <sys/stat.h>
 
 extern "C" {
 #include "utils.h"
@@ -64,8 +66,23 @@ TEST(FindMaxStr, NoQuotes) {
     char* directory = NULL;
     size_t size_of_part = strlen(string);
 
-    ASSERT_EQ(find_max_string(string, &directory, size_of_part), ERR_NULL);
+    EXPECT_EQ(find_max_string(string, &directory, size_of_part), ERR_NULL);
+    free(directory);
 }
 
-//TEST(FindMaxStr,)
+TEST(FindMaxStr, NoSubstring) {
+    const char string[] = {'T', 'e', 'c', 'h', 'n', 'o', 'p', 'a', '"', '"', 'r', 'k', '2'};
+    char* directory = NULL;
+    size_t size_of_part = strlen(string);
+
+    EXPECT_EQ(find_max_string(string, &directory, size_of_part), ERR_NULL);
+    free(directory);
+}
+
+TEST(FindMaxStr, ValidInfo) {
+    const char* path_to_file = "../../test/data/test.eml";
+    char* directory = NULL;
+    EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
+    free(directory);
+}
 
