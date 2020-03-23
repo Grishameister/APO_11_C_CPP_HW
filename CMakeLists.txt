@@ -25,6 +25,8 @@ if(ENABLE_COVERAGE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov --coverage")
 endif()
 
+
+
 configure_file(CMakeLists.txt.in
         googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
@@ -34,6 +36,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} --build .
 
 add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
         ${CMAKE_BINARY_DIR}/googletest-build)
+
 
 include_directories(${includes})
 
@@ -46,4 +49,3 @@ add_executable(${project_name} main.c)
 
 
 target_link_libraries(${project_name} ${library_name})
-
