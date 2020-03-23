@@ -72,19 +72,19 @@ TEST(FindMaxStr, NoQuotes) {
 }
 
 TEST(FindMaxStr, NoSubstring) {
-    const char string[] = {'T', 'e', 'c', 'h', 'n', 'o', 'p', 'a', '"', '"', 'r', 'k', '2'};
+    const char string[] = {'T', 'e', 'c', 'h', 'n', 'o', 'p', 'a', '"', '"', 'r', 'k', '2', '\0'};
     char* directory = NULL;
-    size_t size_of_part = strlen(string);
+    size_t size_of_part = 13;
 
     EXPECT_EQ(find_max_string(string, &directory, size_of_part), ERR_NULL);
     free(directory);
 }
 
-/*TEST(FindMaxStr, ValidInfo) {
+TEST(FindMaxStr, ValidInfo) {
     const char* path_to_file = "../../test/data/test.eml";
     char* directory = NULL;
     EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
     free(directory);
-}*/
+}
 
 
