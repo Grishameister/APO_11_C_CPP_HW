@@ -10,6 +10,6 @@ file(GLOB tests "${PROJECT_SOURCE_DIR}/test/*.cpp")
 
 add_executable(${test_name} ${tests})
 
-target_link_libraries(${test_name} ${library_name} gtest_main gtest)
+target_link_libraries(${test_name} ${library_name} gtest_main gtest -lgtest -pthread)
 
 add_test(NAME ${test_name} COMMAND ${test_name})

@@ -7,6 +7,7 @@ set(CMAKE_C_FLAGS "-g -Wall -Wextra -Werror -Wpedantic -pthread")
 set(CMAKE_C_STANDARD 11)
 
 
+
 if(ENABLE_PARALLEL)
 	add_library(${project_name}parallel_lib SHARED ${PROJECT_SOURCE_DIR}/parallel_lib/src/utils.c)
 	set(includes ${PROJECT_SOURCE_DIR}/parallel_lib/include)
@@ -24,10 +25,20 @@ if(ENABLE_COVERAGE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov --coverage")
 endif()
 
+configure_file(CMakeLists.txt.in
+        googletest-download/CMakeLists.txt)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+
+add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
+        ${CMAKE_BINARY_DIR}/googletest-build)
+
 include_directories(${includes})
 
 enable_testing()
-add_subdirectory(googletest)
+
 add_subdirectory(test)
 
 
