@@ -81,7 +81,7 @@ TEST(FindMaxStr, NoSubstring) {
 }
 
 TEST(FindMaxStr, ValidInfo) {
-    const char* path_to_file = "../../test/data/test.eml";
+    const char* path_to_file = "../test/data/test.eml";
     char* directory = NULL;
     EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
     free(directory);
