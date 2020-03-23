@@ -5,9 +5,7 @@ language: c
 
 
 os:
-
   - linux
-  - osx
 
 compiler:
   # ... и с помощью GCC, и Clang
@@ -26,16 +24,12 @@ addons:
 
 script:
   # скрипт сборки и тестирования проекта:
-  - sudo apt install libgtest-dev build-essential cmake
-  - cd /usr/src/googletest
-  - sudo cmake .
-  - sudo cmake --build . --target install
   - mkdir build
   - cd build
   - cmake ..
   - cmake --build .
   - ctest --output-on-failure
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/tests_tests ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/project_tests ; fi
   - cd ..
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --enable=all --error-exitcode=1 -I include --suppress=missingIncludeSystem ./src ./include/*.h --check-config ; fi
   - ./linters/run.sh
