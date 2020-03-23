@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "time.h"
+#include <time.h>
 #include "utils.h"
 
 int main(int argc, const char **argv) {
