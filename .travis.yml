@@ -1,8 +1,8 @@
-dist:     trusty    # используем Ubuntu 14.04 Trusty Tahr (а не 12.02 Precise Pangolin)
-sudo:     required  # используем Virtual Machine (а не Docker container)
+dist:     trusty
+sudo:     required
 
-language: c      # на практике разницы между специфичным для C++ окружением
-# и, скажем, python -- никакой. Но пусть будет cpp.
+language: c 
+
 
 os:
 
@@ -26,6 +26,7 @@ addons:
 
 script:
   # скрипт сборки и тестирования проекта:
+  - sudo apt-get install --yes libgtest-dev
   - mkdir build
   - cd build
   - cmake ..
