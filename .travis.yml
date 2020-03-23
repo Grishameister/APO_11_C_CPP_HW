@@ -1,46 +1,57 @@
-dist: trusty
-sudo: required
-language: c
+dist:     trusty    # используем Ubuntu 14.04 Trusty Tahr (а не 12.02 Precise Pangolin)
+sudo:     required  # используем Virtual Machine (а не Docker container)
 
-branches:
-  only:
-    - /.*/   
+language: c      # на практике разницы между специфичным для C++ окружением
+# и, скажем, python -- никакой. Но пусть будет cpp.
 
 os:
+  # будем прогонять CI и на Linux, и на Mac OS X...
   - linux
-
+  - osx
 
 compiler:
+  # ... и с помощью GCC, и Clang
   - gcc
+  - clang
 
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
     packages:
       - valgrind
       - cppcheck
       - make
       - cmake
-      - lcov
-      - gcc-7
-      - g++-7
-      - libgtest-dev
+      - python2.7
 
+
+env:
+  # список переменных окружения, влияющих на матрицу сборки:
+  - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
+  - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
+  - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
+  - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+
+matrix:
+  exclude:
+    # вручную исключим ненужные элементы из матрицы сборки:
+    - os:       osx
+      compiler: gcc
+
+    - os:  osx
+      env: TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
+
+    - os:  osx
+      env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
 
 
 script:
-  - pip install --user cpp-coveralls
-  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
-  - export CC=/usr/bin/gcc-7
-  - export CXX=/usr/bin/g++-7
-  - mkdir - p build
+  # скрипт сборки и тестирования проекта:
+  - mkdir build
   - cd build
-  - cmake -DENABLE_PARALLEL=ON -DENABLE_COVERAGE=ON ..
+  - cmake .. #-DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
   - cmake --build .
   - ctest --output-on-failure
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/project_test ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/tests_tests ; fi
   - cd ..
- after_success:
-  - coveralls --root .. --build-root . -E ".*CMakeFiles.*" -E ".*googletest*" --gcov /usr/bin/gcov --gcov-options '\-lp
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --enable=all --error-exitcode=1 -I include --suppress=missingIncludeSystem ./src ./include/*.h --check-config ; fi
+  - ./linters/run.sh
