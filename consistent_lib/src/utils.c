@@ -13,7 +13,7 @@
 
 
 int my_strncpy(const char* str, char** directory, size_t bytes) {
-	if (!str || bytes < 0) {
+	if (!str) {
 		return ERR_NULL;
 	}
 	*directory = calloc(bytes + 1, sizeof(char));
@@ -31,7 +31,7 @@ int my_strncpy(const char* str, char** directory, size_t bytes) {
 
 
 int my_strncat(char* first_str, const char* second_str, char** directory, size_t bytes) {
-	if (!first_str || !second_str || bytes < 0) {
+	if (!first_str || !second_str) {
 		return ERR_NULL;
 	}
 	size_t first_size = strlen(first_str);
@@ -64,7 +64,7 @@ static int is_new_sequence(const char symbol) {
 }
 
 static char* strchr_for_part(const char* str, char symbol, size_t size) {
-	if (!str || size < 0) {
+	if (!str) {
 		return NULL;
 	}
 	size_t i = 0;
@@ -83,7 +83,7 @@ static char* strchr_for_part(const char* str, char symbol, size_t size) {
 }
 
 int find_max_string(const char* text, char** directory, size_t size_of_part) {
-	if (!text || size_of_part < 0) {
+	if (!text) {
 		return ERR_NULL;
 	}
 

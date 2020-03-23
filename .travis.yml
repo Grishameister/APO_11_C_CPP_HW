@@ -10,7 +10,6 @@ os:
 compiler:
   # ... и с помощью GCC, и Clang
   - gcc
-  - clang
 
 addons:
   apt:
@@ -21,15 +20,24 @@ addons:
       - cmake
       - python2.7
       - libgtest-dev
+      - lcov
 
 script:
   # скрипт сборки и тестирования проекта:
+  - pip install --user cpp-coveralls
   - mkdir build
   - cd build
   - cmake ..
   - cmake --build .
-  - ctest --output-on-failure
+  - ctest
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/project_tests ; fi
+  - cd ..
+  - rm -rf build
+  - mkdir build
+  - cd build
+  - cmake -DENABLE_PARALLEL=ON ..
+  - cmake --build .
+  - ctest
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./test/project_tests ; fi
   - cd ..
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --enable=all --error-exitcode=1 -I include --suppress=missingIncludeSystem ./src ./include/*.h --check-config ; fi
-  - ./linters/run.sh
