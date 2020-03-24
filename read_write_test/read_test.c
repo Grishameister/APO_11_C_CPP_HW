@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include "utils.h"
 #include <string.h>
+#include <time.h>
+
+#include "utils.h"
 
 #define ERR_PARSE -9
 #define ERR_TEST -10
@@ -13,10 +15,29 @@ int main(int argc, const char **argv) {
         return -1;
     }
     const char* path_to_text = argv[1];
+
+    clock_t start_t, end_t;
+    start_t = clock();
+
+    char* max = NULL;
+    if (parse_text(path_to_text, &max)) {
+        free(max);
+        return ERR_PARSE;
+    }
+
+    end_t = clock();
+    double total = (double)(end_t - start_t);
+    total = total / CLOCKS_PER_SEC;
+
+    if (!max) {
+        return ERR_NULL;
+    }
+
     FILE* test_file = fopen("../test_file.txt", "r");
     if (!test_file) {
         return ERR_OPEN_FILE;
     }
+
     int descr = fileno(test_file);
     struct stat st;
     if (fstat(descr, &st) != 0) {
@@ -24,28 +45,32 @@ int main(int argc, const char **argv) {
         return ERR_DSCR;
     }
 
-
-    char* max = NULL;
-    if (parse_text(path_to_text, &max)) {
-        free(max);
+    FILE* compare_time = fopen("../compare_time.txt", "r");
+    if (!compare_time) {
         fclose(test_file);
-        return ERR_PARSE;
+        free(max);
+        return ERR_TEST;
     }
 
-    if (!max) {
+    double first_time = 0;
+
+    if (fscanf(compare_time, "%lf", &first_time) != 1) {
         fclose(test_file);
-        return ERR_NULL;
+        fclose(compare_time);
+        free(max);
+        return ERR_TEST;
     }
 
     char* ptr = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, descr, 0);
     if (ptr == MAP_FAILED) {
+        fclose(compare_time);
         fclose(test_file);
         free(max);
         return ERR_MMAP;
     }
+
     if (strcmp(max, ptr)) {
-        printf("%s\n", ptr);
-        printf("%s\n", max);
+        fclose(compare_time);
         fclose(test_file);
         free(max);
         munmap(ptr, st.st_size);
@@ -54,8 +79,11 @@ int main(int argc, const char **argv) {
     }
 
     munmap(ptr, st.st_size);
+    printf("First time is %lf\n", first_time);
+    printf("Second time is %lf\n", total);
     printf("TEST SUCCESS\n");
     free(max);
+    fclose(compare_time);
     fclose(test_file);
     return 0;
 }

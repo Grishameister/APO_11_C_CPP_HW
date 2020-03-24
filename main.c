@@ -8,13 +8,14 @@ int main(int argc, const char **argv) {
         return -1;
     }
     const char* path_to_text = argv[1];
-    clock_t start_t, end_t, total_t;
+    clock_t start_t, end_t;
     start_t = clock();
     char* max = NULL;
     parse_text(path_to_text, &max);
     end_t = clock();
-    total_t = (double)(end_t - start_t);
-    printf("Total time taken by CPU: %ld\n", total_t);
+    double total = (double)(end_t - start_t);
+    total = total / CLOCKS_PER_SEC;
+    printf("Total time taken by CPU: %f\n", total);
     free(max);
     return 0;
 }

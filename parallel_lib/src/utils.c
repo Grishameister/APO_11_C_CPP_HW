@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <sched.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -7,10 +8,12 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "utils.h"
 
 #define ERR_FORK -11
+#define MAX_PIPE_SIZE 1000000
 
 int my_strncpy(const char* str, char** directory, size_t bytes) {
     if (!str) {
@@ -173,15 +176,14 @@ int parse_text(const char* path_to_text, char** directory) {
     int fd[2];
     pid_t pid;
     pipe(fd);
-
-    char buffer[1024] = "";
+    fcntl(fd[1], F_SETPIPE_SZ, MAX_PIPE_SIZE);
+    fcntl(fd[0], F_SETPIPE_SZ, MAX_PIPE_SIZE);
 
     int num_cpu = sysconf(_SC_NPROCESSORS_ONLN);
 
     size_t part = st.st_size / num_cpu;
     size_t offset = 0;
     int error_code = 0;
-
     int i = 0;
     while (i < num_cpu) {
         pid = fork();
@@ -199,8 +201,8 @@ int parse_text(const char* path_to_text, char** directory) {
                 free(max);
                 exit(ERR_FIND_STR);
             }
-
-            write(fd[1], max, strlen(max) + 1);
+            size_t size_str = strlen(max);
+            write(fd[1], max, size_str + 1);
             close(fd[1]);
             munmap(ptr, st.st_size);
             fclose(text);
@@ -215,8 +217,10 @@ int parse_text(const char* path_to_text, char** directory) {
 
     if (pid > 0) {
         close(fd[1]);
-        size_t size = 1024;
+        char* buffer = calloc(60000, sizeof(char));
+        size_t size = 60000;
         size_t size_read = 0;
+
         for (int i = 0; i < num_cpu; i++) {
             wait(NULL);
         }
@@ -224,8 +228,8 @@ int parse_text(const char* path_to_text, char** directory) {
         int in_string = 0;
         char* temp_str = NULL;
         char* max_str = NULL;
-
         while ((size_read = read(fd[0], buffer, size)) > 0) {
+            i++;
             size_t num = 0;
             size_t offset = 0;
             while (offset < size_read && buffer_has_end_of_str(buffer + offset, &num, size_read - offset)) {
@@ -236,7 +240,6 @@ int parse_text(const char* path_to_text, char** directory) {
                         error_code = ERR_COPY;
                         break;
                     }
-
                     in_string = 0;
                     if (max_str == NULL || strlen(max_str) < strlen(temp_str)) {
                         free(max_str);
@@ -282,6 +285,7 @@ int parse_text(const char* path_to_text, char** directory) {
         close(fd[0]);
         munmap(ptr, st.st_size);
         *directory = max_str;
+        free(buffer);
         free(temp_str);
         fclose(text);
     }
