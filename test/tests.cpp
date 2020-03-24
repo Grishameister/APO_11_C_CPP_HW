@@ -7,7 +7,7 @@ extern "C" {
 #include "utils.h"
 }
 
-TEST(CopyString, NullString) {
+/*TEST(CopyString, NullString) {
     const char* null_string = NULL;
     char* directory = NULL;
     size_t bytes = 5;
@@ -23,7 +23,7 @@ TEST(CopyString, ValidString) {
     EXPECT_EQ(my_strncpy(valid_string, &directory, bytes), SUCCESS);
     EXPECT_STREQ(valid_string, directory);
     free(directory);
-}
+}*/
 
 /*TEST(ConcatinateStrings, NullString) {
     char string[] = "123";
