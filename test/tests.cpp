@@ -96,11 +96,11 @@ TEST(FindMaxStr, ValidInfoCompare) {
     free(directory);
 }
 
-TEST(FindMaxStr, ValidInfoCount) {
+/*TEST(FindMaxStr, ValidInfoCount) {
     const char* path_to_file = "../../test/data/btests_emails_big.eml";
     char* directory = NULL;
     size_t answer = 55744;
     EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
     EXPECT_EQ(strlen(directory), answer);
     free(directory);
-}
+}*/
