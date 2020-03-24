@@ -25,7 +25,7 @@ TEST(CopyString, ValidString) {
     free(directory);
 }
 
-TEST(ConcatinateStrings, NullString) {
+/*TEST(ConcatinateStrings, NullString) {
     char string[] = "123";
     const char* null_string = NULL;
     char* directory = NULL;
@@ -50,6 +50,7 @@ TEST(ConcatinateStrings, ValidString) {
 
     EXPECT_STREQ(result, directory);
     free(directory);
+    free(alloc_string);
 }
 
 TEST(FindMaxStr, NullString) {
@@ -80,23 +81,23 @@ TEST(FindMaxStr, NoSubstring) {
     free(directory);
 }
 
-/*TEST(FindMaxStr, ValidInfo) {
+TEST(FindMaxStr, ValidInfo) {
     const char* path_to_file = "../../test/data/test.eml";
     char* directory = NULL;
     EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
     free(directory);
-}*/
+}
 
-/*TEST(FindMaxStr, ValidInfoCompare) {
+TEST(FindMaxStr, ValidInfoCompare) {
     const char* path_to_file = "../../test/data/btests_emails_broken-ctype.eml";
     const char* answer = "Should make its way back into";
     char* directory = NULL;
     EXPECT_EQ(parse_text(path_to_file, &directory), 0);
     EXPECT_STREQ(directory, answer);
     free(directory);
-}*/
+}
 
-/*TEST(FindMaxStr, ValidInfoCount) {
+TEST(FindMaxStr, ValidInfoCount) {
     const char* path_to_file = "../../test/data/btests_emails_big.eml";
     char* directory = NULL;
     size_t answer = 55744;
