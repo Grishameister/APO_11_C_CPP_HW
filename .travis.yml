@@ -12,7 +12,6 @@ compiler:
   - gcc
 
 
-
 addons:
   apt:
     packages:
@@ -45,4 +44,3 @@ script:
 
 after_success:
   - coveralls --root .. --build-root . -E ".*CMakeFiles.*" -E ".*googletest*" --gcov /usr/bin/gcov --gcov-options '\-lp'
-

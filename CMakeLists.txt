@@ -54,3 +54,4 @@ target_link_libraries(write_test ${library_name})
 
 add_executable(read_test ${test_read_sources})
 target_link_libraries(read_test ${library_name})
+
