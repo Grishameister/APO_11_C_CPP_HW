@@ -10,6 +10,8 @@
 
 #include "utils.h"
 
+#define ERR_FORK -11
+
 int my_strncpy(const char* str, char** directory, size_t bytes) {
     if (!str) {
         return ERR_NULL;
@@ -184,7 +186,7 @@ int parse_text(const char* path_to_text, char** directory) {
     while (i < num_cpu) {
         pid = fork();
         if (pid < 0) {
-            printf("Error fork\n");
+            return ERR_FORK;
         }
         if (pid == 0) {
             close(fd[0]);
