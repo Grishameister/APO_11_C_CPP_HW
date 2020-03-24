@@ -81,23 +81,23 @@ TEST(FindMaxStr, NoSubstring) {
 }
 
 TEST(FindMaxStr, ValidInfo) {
-    const char* path_to_file = "../test/data/test.eml";
+    const char* path_to_file = "../../test/data/test.eml";
     char* directory = NULL;
     EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
     free(directory);
 }
 
 TEST(FindMaxStr, ValidInfoCompare) {
-    const char* path_to_file = "../test/data/btests_emails_broken-ctype.eml";
+    const char* path_to_file = "../../test/data/btests_emails_broken-ctype.eml";
     const char* answer = "Should make its way back into";
     char* directory = NULL;
-    EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
+    EXPECT_EQ(parse_text(path_to_file, &directory), 0);
     EXPECT_STREQ(directory, answer);
     free(directory);
 }
 
 TEST(FindMaxStr, ValidInfoCount) {
-    const char* path_to_file = "../test/data/btests_emails_big.eml";
+    const char* path_to_file = "../../test/data/btests_emails_big.eml";
     char* directory = NULL;
     size_t answer = 55744;
     EXPECT_EQ(parse_text(path_to_file, &directory), SUCCESS);
