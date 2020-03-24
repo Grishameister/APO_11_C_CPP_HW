@@ -1,8 +1,5 @@
 #include "gtest/gtest.h"
 
-#include <sys/mman.h>
-#include <sys/stat.h>
-
 extern "C" {
 #include "utils.h"
 }
